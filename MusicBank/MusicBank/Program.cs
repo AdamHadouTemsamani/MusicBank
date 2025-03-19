@@ -1,5 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using MusicBank.Data;
+using MusicBank.Features.Events.GetEvent;
+using MusicBank.Features.Users.GetUser;
+using MusicBank.Features.Users.PostUser;
+using MusicBank.Features.Events.PostEvent;
+using MusicBank.Features.TicketReservations.GetTicketReservations;
+using MusicBank.Features.TicketReservations.PostTicketReservation;
+using MusicBank.Features.TicketReservations.DeleteTicketReservation;
 using MusicBank.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,11 +36,19 @@ using (var scope = app.Services.CreateScope())
 }
 
 //Users endpoints
+app.MapGetUserEndpoints();
+app.MapPostUserEndpoints();
 
 //Events endpoints
+app.MapGetEventEndpoints();
+app.MapPostEventEndpoints();
 
 //TicketReservation endpints
+app.MapGetTicketReservationEndpoints();
+app.MapPostTicketReservationEndpoints();
+app.MapDeleteTicketReservationEndpoints();
 
-app.MapGet("/", () => "Hello World!");
 
 app.Run();
+
+public partial class Program{ }
