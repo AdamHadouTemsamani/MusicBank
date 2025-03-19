@@ -14,9 +14,9 @@ public partial class MusicBankDbContext : DbContext, IMusicBankDbContext
 {
     public MusicBankDbContext(DbContextOptions<MusicBankDbContext> options) : base(options) { }
     
-    public DbSet<UserDTO> Users { get; set; }
-    public DbSet<EventDTO> Events { get; set; }
-    public DbSet<TicketReservationDTO> TicketReservations { get; set; }
+    public virtual DbSet<UserDTO> Users { get; set; }
+    public virtual DbSet<EventDTO> Events { get; set; }
+    public virtual DbSet<TicketReservationDTO> TicketReservations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
