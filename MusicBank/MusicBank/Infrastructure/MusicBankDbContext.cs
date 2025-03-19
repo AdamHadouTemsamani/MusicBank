@@ -1,48 +1,49 @@
 ﻿using MusicBank.Models;
+using MusicBank.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace MusicBank.Data;
 
 public interface IMusicBankDbContext
 {
-    public DbSet<UserDTO> Users { get; set; }
-    public DbSet<EventDTO> Events { get; set; }
-    public DbSet<TicketReservationDTO> TicketReservations { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<TicketReservation> TicketReservations { get; set; }
 }
 
 public partial class MusicBankDbContext : DbContext, IMusicBankDbContext
 {
     public MusicBankDbContext(DbContextOptions<MusicBankDbContext> options) : base(options) { }
     
-    public virtual DbSet<UserDTO> Users { get; set; }
-    public virtual DbSet<EventDTO> Events { get; set; }
-    public virtual DbSet<TicketReservationDTO> TicketReservations { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Event> Events { get; set; }
+    public virtual DbSet<TicketReservation> TicketReservations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //UserDTO mapping
-        modelBuilder.Entity<UserDTO>(entity =>
+        modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("user");
-            entity.HasKey(e => e.Id);
+            entity.HasKey(e => e.UserId);
             
-            entity.Property(e => e.Id).HasColumnName("user_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.Name).HasColumnName("name");
-            entity.Property(e => e.PhoneNumber).HasColumnName("email");
-            entity.Property(e => e.Email).HasColumnName("phone_number");
+            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
+            entity.Property(e => e.Email).HasColumnName("email");
             entity.HasMany(e => e.TicketReservations)
                 .WithOne(tr => tr.User)
-                .HasForeignKey(tr => tr.User);
+                .HasForeignKey(tr => tr.UserId);
 
         });
         
         //EventDTO mapping
-        modelBuilder.Entity<EventDTO>(entity =>
+        modelBuilder.Entity<Event>(entity =>
         {
             entity.ToTable("event");
-            entity.HasKey(e => e.Id);
+            entity.HasKey(e => e.EventId);
 
-            entity.Property(e => e.Id).HasColumnName("event_id");
+            entity.Property(e => e.EventId).HasColumnName("event_id");
             entity.Property(e => e.EventName).HasColumnName("event_name");
             entity.Property(e => e.EventVenue).HasColumnName("event_venue");
             entity.Property(e => e.EventDate).HasColumnName("event_date");
@@ -50,24 +51,22 @@ public partial class MusicBankDbContext : DbContext, IMusicBankDbContext
         });
         
         //TicketReservationDTO mapping
-        modelBuilder.Entity<TicketReservationDTO>(entity =>
+        modelBuilder.Entity<TicketReservation>(entity =>
         {
             entity.ToTable("ticket_reservation");
-            entity.HasKey(e => e.Id);
-            
-            entity.Property(e => e.Id)
-                .HasColumnName("reservation_id");
+            entity.HasKey(e => e.TicketReservationId);
 
-            entity.Property(e => e.ReservationDate)
-                .HasColumnName("reservation_date");
-            
-            entity.HasOne(e => e.User)
-                .WithMany(u => u.TicketReservations)
-                .HasForeignKey("user_id");
-            
-            entity.HasOne(e => e.Event)
-                .WithMany() 
-                .HasForeignKey("event_id");
+            entity.Property(e => e.TicketReservationId).HasColumnName("ticket_reservation_id");
+            entity.Property(e => e.ReservationDate).HasColumnName("reservation_date");
+
+            // Configure relationships
+            entity.HasOne(tr => tr.User)
+                    .WithMany(u => u.TicketReservations)
+                    .HasForeignKey(tr => tr.UserId);
+
+            entity.HasOne(tr => tr.Event)
+                    .WithMany() 
+                    .HasForeignKey(tr => tr.EventId);
         });
         
         OnModelCreatingPartial(modelBuilder);
