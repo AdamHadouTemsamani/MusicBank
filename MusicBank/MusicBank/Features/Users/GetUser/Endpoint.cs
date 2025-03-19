@@ -19,7 +19,7 @@ public static class Endpoint
             ) =>
         {
             var existingUser = await db.Users.FirstOrDefaultAsync(u =>
-                u.Id == userId
+                u.UserId == userId
             );
             if (existingUser is null)
             {

@@ -19,7 +19,7 @@ public static class Endpoint
             ) =>
         {
             var existingEvent = await db.Events.FirstOrDefaultAsync(e =>
-                e.Id == eventId
+                e.EventId == eventId
             );
             if (existingEvent is null)
             {

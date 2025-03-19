@@ -1,6 +1,7 @@
 using MusicBank.Models;
 using MusicBank.Data;
 using Microsoft.EntityFrameworkCore;
+using MusicBank.Domain;
 
 namespace MusicBank.Features.Events.PostEvent;
 
@@ -29,7 +30,7 @@ public static class Endpoint
                 );
             }
 
-            var newEvent = new EventDTO
+            var newEvent = new Event
             {
                 EventName = request.EventName,
                 EventVenue = request.EventVenue,
@@ -38,7 +39,7 @@ public static class Endpoint
             db.Events.Add(newEvent);
             await db.SaveChangesAsync();
             
-            return Results.NoContent();
+            return Results.Created($"/events/{newEvent.EventId}", newEvent);
 
         });
 

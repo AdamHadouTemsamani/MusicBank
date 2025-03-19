@@ -1,7 +1,7 @@
 using MusicBank.Data;
 using MusicBank.Models;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using MusicBank.Domain;
 
 namespace MusicBank.Features.TicketReservations.PostTicketReservation;
 
@@ -20,7 +20,8 @@ public static class Endpoint
             ) =>
         {
             var existingTicketReservation = await db.TicketReservations.FirstOrDefaultAsync(tr =>
-                tr.User == request.User && tr.Event == request.Event
+                tr.UserId == request.UserId && tr.EventId == request.EventId,
+                cancellationToken
             );
             if (existingTicketReservation is not null)
             {
@@ -29,16 +30,16 @@ public static class Endpoint
                 );
             }
 
-            var newTicketReservation = new TicketReservationDTO
+            var newTicketReservation = new TicketReservation
             {
-                Event = request.Event,
-                User = request.User,
+                EventId = request.EventId,
+                UserId = request.UserId,
                 ReservationDate = request.ReservationDate
             };
             db.TicketReservations.Add(newTicketReservation);
             await db.SaveChangesAsync();
             
-            return Results.NoContent();
+            return Results.Created($"/ticket-reservations/{newTicketReservation.TicketReservationId}", newTicketReservation);
 
         });
 

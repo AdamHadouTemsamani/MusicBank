@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Routing;
+﻿using MusicBank.Domain;
 using MusicBank.Data;
 using MusicBank.Models;
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace MusicBank.Features.Users.PostUser;
@@ -31,16 +30,16 @@ public static class Endpoint
                 );
             }
 
-            var newUser = new UserDTO
+            var newUser = new User
             {
                 Name = request.Name,
                 Email = request.Email,
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
             };
             db.Users.Add(newUser);
             await db.SaveChangesAsync();
             
-            return Results.NoContent();
+            return Results.Created($"/users/{newUser.UserId}", newUser); 
 
         });
 

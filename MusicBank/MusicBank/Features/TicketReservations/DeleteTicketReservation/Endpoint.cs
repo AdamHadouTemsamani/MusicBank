@@ -20,7 +20,7 @@ public static class Endpoint
             ) =>
         {
             var ticketReservation = await db.TicketReservations.FirstOrDefaultAsync(tr =>
-                tr.Id == ticketReservationId
+                tr.TicketReservationId == ticketReservationId
             );
             if (ticketReservation is null)
             {
