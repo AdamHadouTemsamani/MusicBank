@@ -11,8 +11,9 @@ using MusicBank.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddDbContext<MusicBankDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("MusicBankDb")));
 
 builder.Services.AddScoped<IMusicBankDbContext>(provider =>
     provider.GetRequiredService<MusicBankDbContext>()
