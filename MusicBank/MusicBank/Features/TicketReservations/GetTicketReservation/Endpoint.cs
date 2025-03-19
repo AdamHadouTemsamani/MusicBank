@@ -3,11 +3,11 @@ using MusicBank.Models;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
-namespace MusicBank.Features.TicketReservtions.GetTicketReservations;
+namespace MusicBank.Features.TicketReservations.GetTicketReservations;
 
 public static class Endpoint
 {
-    public static IEndpointRouteBuilder MapGetTicketReservation(
+    public static IEndpointRouteBuilder MapGetTicketReservationEndpoints(
         this IEndpointRouteBuilder routes
     )
     {
