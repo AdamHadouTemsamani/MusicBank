@@ -6,7 +6,7 @@ namespace MusicBank.Features.Events.PostEvent;
 
 public static class Endpoint
 {
-    public static IEndpointRouteBuilder MapPostEvent(
+    public static IEndpointRouteBuilder MapPostEventEndpoints(
         this IEndpointRouteBuilder routes
     )
     {

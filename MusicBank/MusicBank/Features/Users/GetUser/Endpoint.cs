@@ -6,7 +6,7 @@ namespace MusicBank.Features.Users.GetUser;
 
 public static class Endpoint
 {
-    public static IEndpointRouteBuilder MapGetUser(
+    public static IEndpointRouteBuilder MapGetUserEndpoints(
         this IEndpointRouteBuilder routes
     )
     {

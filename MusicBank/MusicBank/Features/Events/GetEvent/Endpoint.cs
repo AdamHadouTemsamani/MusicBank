@@ -6,7 +6,7 @@ namespace MusicBank.Features.Events.GetEvent;
 
 public static class Endpoint
 {
-    public static IEndpointRouteBuilder MapGetEvent(
+    public static IEndpointRouteBuilder MapGetEventEndpoints(
         this IEndpointRouteBuilder routes
     )
     {

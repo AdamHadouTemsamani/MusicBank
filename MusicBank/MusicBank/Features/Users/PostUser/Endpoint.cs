@@ -8,7 +8,7 @@ namespace MusicBank.Features.Users.PostUser;
 
 public static class Endpoint
 {
-    public static IEndpointRouteBuilder MapPostUser(
+    public static IEndpointRouteBuilder MapPostUserEndpoints(
         this IEndpointRouteBuilder routes
     )
     {
