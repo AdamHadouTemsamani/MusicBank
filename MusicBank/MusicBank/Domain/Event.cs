@@ -1,21 +1,20 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MusicBank.Domain;
 
-[Table("Event")]
 public class Event
 {
-    [Key]
-    [Column("event_id")]
-    public int EventId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
 
-    [Column("event_name", TypeName = "TEXT")]
+    [BsonElement("event_name")]
     public string EventName { get; set; } = null!;
 
-    [Column("event_venue", TypeName = "TEXT")]
+    [BsonElement("event_venue")]
     public string EventVenue { get; set; } = null!;
 
-    [Column("event_date")]
+    [BsonElement("event_date")]
     public DateTime EventDate { get; set; }
 }

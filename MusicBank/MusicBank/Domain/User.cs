@@ -1,25 +1,24 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MusicBank.Domain;
 
-[Table("User")] 
-public partial class User
+public class User
 {
-    [Key]
-    [Column("user_id")]
-    public int UserId { get; set; }
-    
-    [Column("name", TypeName = "TEXT")]
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString(); // MongoDB `_id`
+
+    [BsonElement("name")]
     public string Name { get; set; } = null!;
 
-    [Column("email", TypeName = "TEXT")]
+    [BsonElement("email")]
     public string Email { get; set; } = null!;
 
-    [Column("phone_number", TypeName = "TEXT")]
+    [BsonElement("phone_number")]
     public string PhoneNumber { get; set; } = null!;
 
-    [Column("ticket-reservations")]
-    public ICollection<TicketReservation> TicketReservations { get; set; } = new List<TicketReservation>();
-
+    // Store TicketReservation IDs instead of navigation properties
+    [BsonElement("ticket_reservation_ids")]
+    public List<string> TicketReservationIds { get; set; } = new();
 }

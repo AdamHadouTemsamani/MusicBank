@@ -1,7 +1,9 @@
 using MusicBank.Data;
 using MusicBank.Models;
 using System.Text.Json;
+using MusicBank.Domain;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace MusicBank.Features.TicketReservations.DeleteTicketReservation;
 
@@ -14,21 +16,32 @@ public static class Endpoint
         routes.MapDelete(
             "/ticket-reservations/{ticketReservationId}", 
             async (
-                int ticketReservationId,
-                MusicBankDbContext db, 
+                string ticketReservationId,
+                MongoDbContext db, 
                 CancellationToken cancellationToken
             ) =>
         {
-            var ticketReservation = await db.TicketReservations.FirstOrDefaultAsync(tr =>
-                tr.TicketReservationId == ticketReservationId
-            );
-            if (ticketReservation is null)
-            {
-                return Results.NotFound();
-            }
-            db.TicketReservations.Remove(ticketReservation);
-            await db.SaveChangesAsync();
-            return Results.NoContent();
+            // Create a filter for the ticket reservation
+                var filter = Builders<TicketReservation>.Filter.Eq(tr => tr.Id, ticketReservationId);
+
+                // Find the ticket reservation using the filter
+                var ticketReservation = await db.TicketReservations.Find(filter)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                if (ticketReservation is null)
+                {
+                    return Results.NotFound();
+                }
+
+                // Delete the ticket reservation
+                var deleteResult = await db.TicketReservations.DeleteOneAsync(filter, cancellationToken);
+
+                if (deleteResult.DeletedCount > 0)
+                {
+                    return Results.NoContent();
+                }
+
+                return Results.Problem("Failed to delete ticket reservation.");
         });
 
         return routes;

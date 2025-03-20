@@ -11,18 +11,22 @@ using MusicBank.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<MusicBankDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("MusicBankDb")));
-
-builder.Services.AddScoped<IMusicBankDbContext>(provider =>
-    provider.GetRequiredService<MusicBankDbContext>()
-);
+// **Configure MongoDB settings**
+builder.Services.Configure<MongoDbSettings>(
+    builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddSingleton<MongoDbContext>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+// **Drop and recreate the MongoDB database on startup**
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<MongoDbContext>();
+    dbContext.RecreateDatabase();  // Deletes and recreates the database
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -30,26 +34,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<MusicBankDbContext>();
-    db.Database.Migrate();
-}
-
-//Users endpoints
+// Map endpoints
 app.MapGetUserEndpoints();
 app.MapPostUserEndpoints();
-
-//Events endpoints
 app.MapGetEventEndpoints();
 app.MapPostEventEndpoints();
-
-//TicketReservation endpints
 app.MapGetTicketReservationEndpoints();
 app.MapPostTicketReservationEndpoints();
 app.MapDeleteTicketReservationEndpoints();
 
-
 app.Run();
 
-public partial class Program{ }
+public partial class Program { }

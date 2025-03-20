@@ -2,6 +2,8 @@ using MusicBank.Data;
 using MusicBank.Models;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
+using MusicBank.Domain;
 
 namespace MusicBank.Features.TicketReservations.GetTicketReservations;
 
@@ -14,19 +16,16 @@ public static class Endpoint
         routes.MapGet(
             "/ticket-reservations/{ticketReservationId}", 
             async (
-                int ticketReservationId,
-                MusicBankDbContext db, 
+                string ticketReservationId,
+                MongoDbContext db, 
                 CancellationToken cancellationToken
             ) =>
         {
-            var ticketReservation = await db.TicketReservations.FirstOrDefaultAsync(tr =>
-                tr.TicketReservationId == ticketReservationId
-            );
-            if (ticketReservation is null)
-            {
-                return Results.NotFound();
-            }
-            return Results.Ok(ticketReservation);
+            var filter = Builders<TicketReservation>.Filter.Eq(tr => tr.Id, ticketReservationId);
+                    var ticketReservation = await db.TicketReservations.Find(filter).FirstOrDefaultAsync(cancellationToken);
+                    return ticketReservation is null
+                        ? Results.NotFound()
+                        : Results.Ok(ticketReservation);
         });
 
         return routes;

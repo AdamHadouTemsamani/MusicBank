@@ -1,6 +1,7 @@
 using MusicBank.Models;
 using MusicBank.Data;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 using MusicBank.Domain;
 
 namespace MusicBank.Features.Events.PostEvent;
@@ -15,19 +16,15 @@ public static class Endpoint
             "/events", 
             async (
                 EventDTO request,
-                MusicBankDbContext db, 
+                MongoDbContext db, 
                 CancellationToken cancellationToken
             ) =>
         {
-            // Check if an event with the same name already exists.
-            var existingEvent = await db.Events.FirstOrDefaultAsync(e =>
-                e.EventName == request.EventName
-            );
+            var filter = Builders<Event>.Filter.Eq(e => e.EventName, request.EventName);
+            var existingEvent = await db.Events.Find(filter).FirstOrDefaultAsync(cancellationToken);
             if (existingEvent is not null)
             {
-                return Results.Conflict(
-                    "An event with the same name already exists."
-                );
+                return Results.Conflict("An event with the same name already exists.");
             }
 
             var newEvent = new Event
@@ -35,11 +32,11 @@ public static class Endpoint
                 EventName = request.EventName,
                 EventVenue = request.EventVenue,
                 EventDate = request.EventDate
+                // Ensure that EventId is set appropriately (or generated) if needed.
             };
-            db.Events.Add(newEvent);
-            await db.SaveChangesAsync();
-            
-            return Results.Created($"/events/{newEvent.EventId}", newEvent);
+
+            await db.Events.InsertOneAsync(newEvent, cancellationToken: cancellationToken);
+            return Results.Created($"/events/{newEvent.Id}", newEvent);
 
         });
 

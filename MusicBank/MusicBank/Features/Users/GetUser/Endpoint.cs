@@ -1,6 +1,7 @@
 using MusicBank.Data;
-using MusicBank.Models;
 using Microsoft.EntityFrameworkCore;
+using MusicBank.Domain;
+using MongoDB.Driver;
 
 namespace MusicBank.Features.Users.GetUser;
 
@@ -13,20 +14,16 @@ public static class Endpoint
         routes.MapGet(
             "/users/{userId}", 
             async (
-                int userId,
-                MusicBankDbContext db, 
+                string userId,
+                MongoDbContext db, 
                 CancellationToken cancellationToken
             ) =>
         {
-            var existingUser = await db.Users.FirstOrDefaultAsync(u =>
-                u.UserId == userId
-            );
-            if (existingUser is null)
-            {
-                return Results.NotFound();
-            }
-
-            return Results.Ok(existingUser);
+            var filter = Builders<User>.Filter.Eq(u => u.Id, userId);
+            var existingUser = await db.Users.Find(filter).FirstOrDefaultAsync(cancellationToken);
+            return existingUser is null
+                ? Results.NotFound()
+                : Results.Ok(existingUser);
 
         });
 

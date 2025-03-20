@@ -2,6 +2,7 @@
 using MusicBank.Data;
 using MusicBank.Models;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Driver;
 
 namespace MusicBank.Features.Users.PostUser;
 
@@ -15,19 +16,18 @@ public static class Endpoint
             "/users", 
             async (
                 UserDTO request,
-                MusicBankDbContext db, 
+                MongoDbContext db, 
                 CancellationToken cancellationToken
             ) =>
         {
-           // Check if a user with the same email or username already exists.
-            var existingUser = await db.Users.FirstOrDefaultAsync(u =>
-                u.Email == request.Email || u.Name == request.Name
+           var filter = Builders<User>.Filter.Or(
+                        Builders<User>.Filter.Eq(u => u.Email, request.Email),
+                        Builders<User>.Filter.Eq(u => u.Name, request.Name)
             );
+            var existingUser = await db.Users.Find(filter).FirstOrDefaultAsync(cancellationToken);
             if (existingUser is not null)
             {
-                return Results.Conflict(
-                    "A user with the same email or username already exists."
-                );
+                return Results.Conflict("A user with the same email or username already exists.");
             }
 
             var newUser = new User
@@ -35,11 +35,12 @@ public static class Endpoint
                 Name = request.Name,
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
+                TicketReservationIds = new List<string>()
+                // Ensure UserId is set/generated as needed.
             };
-            db.Users.Add(newUser);
-            await db.SaveChangesAsync();
-            
-            return Results.Created($"/users/{newUser.UserId}", newUser); 
+
+            await db.Users.InsertOneAsync(newUser, cancellationToken: cancellationToken);
+            return Results.Created($"/users/{newUser.Id}", newUser);
 
         });
 

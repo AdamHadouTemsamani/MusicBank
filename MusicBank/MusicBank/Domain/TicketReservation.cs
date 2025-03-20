@@ -1,25 +1,22 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MusicBank.Domain;
 
-[Table("TicketReservation")]
-public partial class TicketReservation
+public class TicketReservation
 {
-    [Key]
-    [Column("ticket_reservation_id")]
-    public int TicketReservationId { get; set; }
-    
-    [ForeignKey("user_id")]
-    public int UserId { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
 
-    [ForeignKey("event_id")]
-    public int EventId { get; set; }
+    [BsonElement("user_id")]
+    [BsonRepresentation(BsonType.ObjectId)] // Store reference to User as ObjectId
+    public string? UserId { get; set; }
 
-    [Column("reservation_date")]
+    [BsonElement("event_id")]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string? EventId { get; set; }
+
+    [BsonElement("reservation_date")]
     public DateTime ReservationDate { get; set; }
-
-    // Navigation properties
-    public User? User { get; set; }
-    public Event? Event { get; set; }
 }

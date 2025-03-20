@@ -1,7 +1,8 @@
 using MusicBank.Data;
 using MusicBank.Models;
-using Microsoft.EntityFrameworkCore;
 using MusicBank.Domain;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace MusicBank.Features.TicketReservations.PostTicketReservation;
 
@@ -15,35 +16,37 @@ public static class Endpoint
             "/ticket-reservations", 
             async (
                 TicketReservationDTO request,
-                MusicBankDbContext db, 
+                MongoDbContext db, 
                 CancellationToken cancellationToken
             ) =>
         {
-            var existingTicketReservation = await db.TicketReservations.FirstOrDefaultAsync(tr =>
-                tr.UserId == request.UserId && tr.EventId == request.EventId,
-                cancellationToken
+            var userId = request.UserId;
+            var eventId = request.EventId;
+
+            // Check if a reservation for this user and event already exists
+            var filter = Builders<TicketReservation>.Filter.And(
+                Builders<TicketReservation>.Filter.Eq(tr => tr.UserId, userId.ToString()),
+                Builders<TicketReservation>.Filter.Eq(tr => tr.EventId, eventId.ToString())
             );
+
+            var existingTicketReservation = await db.TicketReservations.Find(filter).FirstOrDefaultAsync(cancellationToken);
             if (existingTicketReservation is not null)
             {
-                return Results.Conflict(
-                    "A ticket reservation for the same event and user already exists."
-                );
+                return Results.Conflict("A ticket reservation for the same event and user already exists.");
             }
 
             var newTicketReservation = new TicketReservation
             {
-                EventId = request.EventId,
-                UserId = request.UserId,
+                UserId = userId.ToString(),  // Store as ObjectId string
+                EventId = eventId.ToString(),
                 ReservationDate = request.ReservationDate
             };
-            db.TicketReservations.Add(newTicketReservation);
-            await db.SaveChangesAsync();
-            
-            return Results.Created($"/ticket-reservations/{newTicketReservation.TicketReservationId}", newTicketReservation);
 
+            await db.TicketReservations.InsertOneAsync(newTicketReservation, cancellationToken: cancellationToken);
+
+            return Results.Created($"/ticket-reservations/{newTicketReservation.Id}", newTicketReservation);
         });
 
         return routes;
     }
-    
 }
