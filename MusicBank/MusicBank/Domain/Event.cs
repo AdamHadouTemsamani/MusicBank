@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicBank.Domain;
 
-[Table("Event")]
+[Table("event")]
 public class Event
 {
     [Key]

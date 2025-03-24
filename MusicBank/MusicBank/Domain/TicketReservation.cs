@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicBank.Domain;
 
-[Table("TicketReservation")]
+[Table("ticket_reservation")]
 public partial class TicketReservation
 {
     [Key]

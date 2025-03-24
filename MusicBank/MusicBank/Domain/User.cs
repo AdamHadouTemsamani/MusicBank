@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MusicBank.Domain;
 
-[Table("User")] 
+[Table("users")] 
 public partial class User
 {
     [Key]
@@ -18,8 +18,7 @@ public partial class User
 
     [Column("phone_number", TypeName = "TEXT")]
     public string PhoneNumber { get; set; } = null!;
-
-    [Column("ticket-reservations")]
+    
     public ICollection<TicketReservation> TicketReservations { get; set; } = new List<TicketReservation>();
 
 }

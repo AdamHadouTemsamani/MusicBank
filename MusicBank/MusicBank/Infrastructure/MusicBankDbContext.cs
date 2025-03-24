@@ -2,7 +2,7 @@
 using MusicBank.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace MusicBank.Data;
+namespace MusicBank.Infrastructure;
 
 public interface IMusicBankDbContext
 {
@@ -24,7 +24,7 @@ public partial class MusicBankDbContext : DbContext, IMusicBankDbContext
         //UserDTO mapping
         modelBuilder.Entity<User>(entity =>
         {
-            entity.ToTable("user");
+            entity.ToTable("users");
             entity.HasKey(e => e.UserId);
             
             entity.Property(e => e.UserId).HasColumnName("user_id");

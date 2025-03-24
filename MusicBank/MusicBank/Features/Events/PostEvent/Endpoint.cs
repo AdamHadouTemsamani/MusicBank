@@ -1,5 +1,5 @@
 using MusicBank.Models;
-using MusicBank.Data;
+using MusicBank.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using MusicBank.Domain;
 

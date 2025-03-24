@@ -12,12 +12,6 @@ namespace MusicBank.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            //Delete the existing tables
-            migrationBuilder.Sql("DROP TABLE IF EXISTS ticket_reservation");
-            migrationBuilder.Sql("DROP TABLE IF EXISTS event");
-            migrationBuilder.Sql("DROP TABLE IF EXISTS user");
-
-            //Create the new tables
             migrationBuilder.CreateTable(
                 name: "event",
                 columns: table => new
@@ -34,7 +28,7 @@ namespace MusicBank.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "user",
+                name: "users",
                 columns: table => new
                 {
                     user_id = table.Column<int>(type: "integer", nullable: false)
@@ -45,7 +39,7 @@ namespace MusicBank.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_user", x => x.user_id);
+                    table.PrimaryKey("PK_users", x => x.user_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,9 +62,9 @@ namespace MusicBank.Migrations
                         principalColumn: "event_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ticket_reservation_user_UserId",
+                        name: "FK_ticket_reservation_users_UserId",
                         column: x => x.UserId,
-                        principalTable: "user",
+                        principalTable: "users",
                         principalColumn: "user_id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -96,7 +90,7 @@ namespace MusicBank.Migrations
                 name: "event");
 
             migrationBuilder.DropTable(
-                name: "user");
+                name: "users");
         }
     }
 }

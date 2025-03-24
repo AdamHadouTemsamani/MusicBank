@@ -1,4 +1,4 @@
-using MusicBank.Data;
+using MusicBank.Infrastructure;
 using MusicBank.Models;
 using Microsoft.EntityFrameworkCore;
 
