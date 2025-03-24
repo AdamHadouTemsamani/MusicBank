@@ -1,6 +1,15 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d9e942a6_002Dbf2d_002D4911_002Db74c_002D566461acac69/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ApiConcurrentLoadTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=308777f6_002D5563_002D458f_002D9b2a_002D4387d7dac022/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Concurrent_GetUsersReservedTickets_MeasureResponseTimes" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
-    &lt;TestId&gt;xUnit::B641A3B2-5CEC-0065-AF1F-A600D9D82A77::net8.0::MusicBank.MusicBank.Tests.Performance.ApiConcurrentLoadTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::B641A3B2-5CEC-0065-AF1F-A600D9D82A77::net8.0::MusicBank.MusicBank.Tests.Performance.ConcurrentLoadTestsWithLevels.Concurrent_GetUsersReservedTickets_MeasureResponseTimes&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+&lt;/SessionState&gt;</s:String>
+	
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eb31cdb4_002Dda89_002D4e43_002D9c61_002D1470f92abb9f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ConcurrentLoadTestsWithLevels" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::B641A3B2-5CEC-0065-AF1F-A600D9D82A77::net8.0::MusicBank.MusicBank.Tests.Performance.ConcurrentLoadTestsWithLevels&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	</wpf:ResourceDictionary>
