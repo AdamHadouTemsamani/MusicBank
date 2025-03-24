@@ -2,7 +2,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MusicBank.Domain;
 
-namespace MusicBank.Data
+namespace MusicBank.Infrastructure
 {
     public class MongoDbContext
     {

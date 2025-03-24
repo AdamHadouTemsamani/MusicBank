@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MusicBank.Data;
+using MusicBank.Infrastructure;
 using MusicBank.Features.Events.GetEvent;
 using MusicBank.Features.Users.GetUser;
 using MusicBank.Features.Users.PostUser;
