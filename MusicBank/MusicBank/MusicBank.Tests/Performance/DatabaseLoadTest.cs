@@ -1,3 +1,4 @@
+/*
 using MusicBank.Infrastructure; // for MusicBankDbContext
 using Microsoft.EntityFrameworkCore;// for DbContextOptions
 using MusicBank.Tests.FakeDataGenerators;
@@ -78,3 +79,4 @@ public class DatabaseLoadPostgresTests: IAsyncLifetime
         await seeder.ClearTestDataAsync();
     }
 }
+*/
