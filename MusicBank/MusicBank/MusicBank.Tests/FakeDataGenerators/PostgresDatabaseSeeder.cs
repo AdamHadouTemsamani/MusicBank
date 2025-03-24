@@ -28,7 +28,7 @@ public class PostgresDatabaseSeeder
         var savedUsers = _context.Users.ToList();
         var savedEvents = _context.Events.ToList();
 
-        var reservations = SqlFakeDataGenerator.GenerateReservations(20000, savedUsers, savedEvents);
+        var reservations = SqlFakeDataGenerator.GenerateReservations(2000, savedUsers, savedEvents);
         await _context.TicketReservations.AddRangeAsync(reservations);
         await _context.SaveChangesAsync();
 
